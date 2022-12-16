@@ -10,7 +10,7 @@ Infix "∈" := In (at level 30).
 Notation "x '∉' y" := (¬ In x y) (at level 30). 
 Set Implicit Arguments. 
 
-(* DWS {} and @fst *, clarify)
+(* DWS {} and @fst, clarify *)
 Definition domain {a b} := map (@fst a b). 
 
 Section ssa. 
