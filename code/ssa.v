@@ -5,25 +5,30 @@ Require Import
   List
 . 
 Import ListNotations. 
+(* DWS easy way to get Unicode? *)
 Infix "∈" := In (at level 30). 
 Notation "x '∉' y" := (¬ In x y) (at level 30). 
 Set Implicit Arguments. 
 
+(* DWS {} and @fst *, clarify)
 Definition domain {a b} := map (@fst a b). 
 
 Section ssa. 
 Variable (label instr var : Type). 
+(* DWS how to read dec_eq and parse the following: *)
 Definition dec_eq a := ∀ x y : a, {x = y} + {x <> y}. 
 Variable (var_eq : dec_eq var). 
 Variable (label_eq : dec_eq label). 
 Variable (entry : label).
 
 Inductive term : Type := 
+(* DWS what is this constructor form, why not just ret? *)
+(* why not | ret | jump: label | branch: var -> label -> label *)
   | ret : term
   | jump : label → term
   | br : var → label → label → term
   .
-
+(* DWS same question, why -> bb, backreference? *)
 Inductive bb : Type := 
   | bbinstr : instr → bb → bb
   | bbterm : term → bb
@@ -43,9 +48,12 @@ Definition outEdges (b : bb) : list label := match getTerm b with
   | ret => []
   end.
 
+(* DWS clarify *)
 Variable function_entry : ∀ f : function, entry ∈ domain f. 
+(* DWS clarify types of x, y, b... *)
 Variable closed : ∀ (f : function) x y b, (x, b) ∈ f → y ∈ outEdges b → y ∈ domain f.
 
+(* DWS what is relation?, what is lambda and where is it defined *)
 Definition cfg (f: function) : relation label := λ x y, ∃ b,
   (x, b) ∈ f ∧ y ∈ outEdges b. 
 
